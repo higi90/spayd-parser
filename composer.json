@@ -1,0 +1,26 @@
+{
+    "name": "higi90/spayd-parser",
+    "description": "Spayd format parser PHP libary",
+    "homepage": "http://jbrada.cz",
+    "type": "libary",
+    "license": [
+        "MIT"
+    ],
+    "authors": [
+        {
+            "name": "Jiří Brada",
+            "homepage": "http://jbrada.cz"
+        }
+    ],
+    "require": {
+        "php": ">=7.0.0",
+        "guzzlehttp/guzzle": "^6.2"
+    },
+    "autoload": {
+        "classmap": ["src/"]
+    },
+    "minimum-stability": "stable",
+    "require-dev": {
+        "nette/tester": "^1.7"
+    }
+}
