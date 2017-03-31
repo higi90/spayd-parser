@@ -36,6 +36,8 @@ class Spayd
      */
     private $params = [];
     
+    private $account;
+    
     /**
      * @param string $spaydString
      */
@@ -48,14 +50,20 @@ class Spayd
     }
 
     /**
-     * Divides sprayd string into $params array
+     * Divides spayd string into $params array
      *
      * @param string $spaydString
      * @return void
      */
     private function splitString(string $spaydString)
     {
-        $spaydArray = explode('*', $spaydString);
+        $spaydStringDecoded = rawurldecode($spaydString);
+        
+        if (substr($spaydStringDecoded, -1) == '*') {
+            $spaydArray = explode('*', substr($spaydStringDecoded, 0, -1));
+        } else {
+             $spaydArray = explode('*', $spaydStringDecoded);
+        }
         
         $this->params['VERSION'] = $spaydArray[1];
         
@@ -64,8 +72,15 @@ class Spayd
         
         foreach ($spaydArray as $item) {
             $itemExploded = explode(':', $item);
+            
+            if (!isset($itemExploded[1]) || !in_array($itemExploded[0], self::EXPECTED_PARAMS)) {
+                continue;
+            }
+            
             $this->params[$itemExploded[0]] = $itemExploded[1];
         }
+        
+        $this->account = AccountFactory::parseAccount($this->getParam('ACC'));
     }
     
     /**
@@ -75,7 +90,7 @@ class Spayd
      * @throws Exception\InvalidParamKeyException
      * @return string
      */
-    public function getParam(string $key) : string
+    public function getParam(string $key)
     {
         if (!in_array($key, self::EXPECTED_PARAMS)) {
             throw new Exception\InvalidParamKeyException('Parameter ' . $key . ' is not valid.');
@@ -89,12 +104,22 @@ class Spayd
     }
     
     /**
-     * Get all sprayd params
+     * Gets all sprayd params
      *
      * @return array
      */
     public function getParams() : array
     {
         return $this->params;
+    }
+    
+    /**
+     * Gets account
+     *
+     * @return Higi90\SpaydParser\Account
+     */
+    public function getAccount() : Account
+    {
+        return $this->account;
     }
 }
