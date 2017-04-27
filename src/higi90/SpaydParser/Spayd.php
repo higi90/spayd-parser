@@ -122,4 +122,18 @@ class Spayd
     {
         return $this->account;
     }
+    
+    /**
+     * Gets due date datetime obj
+     * 
+     * @return bool|Datetime
+     */
+    public function getDueDate()
+    {
+        if(empty($this->getParam('DT'))) {
+            return false;
+        }
+        
+        return \DateTime::createFromFormat('Ymd', $this->getParam('DT'));
+    }
 }
