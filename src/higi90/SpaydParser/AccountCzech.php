@@ -37,7 +37,7 @@ class AccountCzech extends Account
         }
 
         $this->bankCode = substr($this->iban, 4, 4);
-        $this->accountNumber = substr($this->iban, 8, 16);
+        $this->accountNumber = substr($this->iban, 8, 6) . '-' . substr($this->iban, 14, 10);
     }
 
     /**
